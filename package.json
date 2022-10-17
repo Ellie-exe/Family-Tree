@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Ellie-exe/family-tree/issues"
   },
-  "homepage": "https://github.com/Ellie-exe/family-tree#readme"
+  "homepage": "https://github.com/Ellie-exe/family-tree#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
