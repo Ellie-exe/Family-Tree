@@ -7,7 +7,7 @@ const PORT = 80;
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('/api', (req, res) => {
-    res.json({ message: 'Hello there!' });
+    res.json({ message: 'This text was fetched from our API!' });
 });
 
 app.get('*', (req, res) => {
