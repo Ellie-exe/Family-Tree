@@ -2,6 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const delay = (ms) => {
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
 function App() {
     const [data, setData] = React.useState(null);
 
