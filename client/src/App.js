@@ -8,7 +8,7 @@ const delay = (ms) => {
     );
 }
 
-function App() {
+const App = () => {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
