@@ -4,7 +4,10 @@
   "description": "Family tree project for CSC-380",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "cd client && npm run build",
+    "start": "pm2 start server/index.js",
+    "stop": "pm2 stop index",
+    "kill": "pm2 kill"
   },
   "repository": {
     "type": "git",
