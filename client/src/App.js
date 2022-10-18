@@ -2,13 +2,22 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const delay = (ms) => {
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
+
+const App = () => {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
         fetch('/api')
             .then((res) => res.json())
-            .then((data) => setData(data.message));
+            .then(async (data) => {
+                await delay(1000)
+                setData(data.message)
+            });
     }, []);
 
     return (
