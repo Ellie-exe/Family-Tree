@@ -14,7 +14,10 @@ const App = () => {
     React.useEffect(() => {
         fetch('/api')
             .then((res) => res.json())
-            .then((data) => setData(data.message));
+            .then(async (data) => {
+                await delay(1000)
+                setData(data.message)
+            });
     }, []);
 
     return (
