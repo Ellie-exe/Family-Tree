@@ -1,12 +1,28 @@
 import React from 'react';
 import './App.css';
-import Login from './login/Login';
+
+const delay = (ms) => {
+    return new Promise(
+        resolve => setTimeout(resolve, ms)
+    );
+}
 
 const App = () => {
+    const [data, setData] = React.useState(null);
+
+    React.useEffect(() => {
+        fetch('/api')
+            .then((res) => res.json())
+            .then(async (data) => {
+                await delay(1000)
+                setData(data.message)
+            });
+    }, []);
+
     return (
         <div className='App'>
             <header className='App-header'>
-                <Login/>
+                <p>{data ? data : 'Loading...'}</p>
             </header>
         </div>
     );
