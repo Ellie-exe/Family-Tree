@@ -5,7 +5,7 @@ await mongoose.connect('mongodb://localhost:27017/test');
 const router = express.Router
 router.use(express.json());
 
-import treeSchema from '../schemas/treeSchema';
+import treeSchema from '../schemas/treeSchema.js';
 const Trees = mongoose.model('Trees', treeSchema);
 
 router.get('/:id', (req, res) => {

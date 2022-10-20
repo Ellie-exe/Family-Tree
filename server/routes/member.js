@@ -5,7 +5,7 @@ await mongoose.connect('mongodb://localhost:27017/test');
 const router = express.Router
 router.use(express.json());
 
-import memberSchema from '../schemas/memberSchema';
+import memberSchema from '../schemas/memberSchema.js';
 const Members = mongoose.model('Members', memberSchema);
 
 router.get('/:id', (req, res) => {

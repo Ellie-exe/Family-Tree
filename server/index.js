@@ -6,10 +6,10 @@ const PORT = 8080;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-import tree from './routes/tree';
+import tree from './routes/tree.js';
 app.use('/api/tree', tree);
 
-import member from './routes/member';
+import member from './routes/member.js';
 app.use('/api/member', member);
 
 app.get('*', (req, res) => {
