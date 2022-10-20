@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cd client && npm run build",
-    "start": "pm2 start server/index.js",
+    "start": "pm2 start server/index.js && pm2 logs",
     "stop": "pm2 stop index",
     "kill": "pm2 kill"
   },
