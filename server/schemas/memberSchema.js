@@ -1,10 +1,8 @@
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+import { Schema } from 'mongoose';
 
 const treeSchema = new Schema({
     name: String,
-    age: Number,
-    gender: String
+    age: Number
 });
 
 export default treeSchema
