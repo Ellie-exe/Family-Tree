@@ -10,7 +10,7 @@ const trees = mongoose.model('trees', treeSchema);
 
 router.get('/:id', (req, res) => {
     trees.findOne({ id: req.params.id }, (err, tree) => {
-        if (err) {res.sendStatus(404); }
+        if (err) { res.sendStatus(404); }
         else { res.json(tree); }
     });
 });
@@ -26,6 +26,21 @@ router.delete('/:id', (req, res) => {
     trees.findOneAndDelete({ id: req.params.id }, (err, tree) => {
         if (err) { res.sendStatus(404); }
         else { res.sendStatus(200); }
+    });
+});
+
+router.create('/:id/members', async (req, res) => {
+    import memberSchema from '../schemas/memberSchema.js';
+    const members = mongoose.model('members', memberSchema);
+
+    await members.create({}, (err, member) => {
+        if (err) { res.sendStatus(404); }
+
+        trees.findOne({ id: req.params.id }, (err, tree) => {
+            if (err) { res.sendStatus(404); }
+
+            tree.members.push(member);
+        });
     });
 });
 
