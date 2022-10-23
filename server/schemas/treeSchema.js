@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+import { Schema } from 'mongoose';
 
 const treeSchema = new Schema({
     id: Number,
@@ -7,8 +6,8 @@ const treeSchema = new Schema({
     userIDs: [Number],
     members: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Members'
+            type: Schema.Types.ObjectId,
+            ref: 'members'
         }
     ]
 });
