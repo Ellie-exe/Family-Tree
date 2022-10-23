@@ -10,11 +10,11 @@ const PORT = 8080;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-// import tree from './routes/tree.js';
-// app.use('/api/tree', tree);
-//
-// import member from './routes/member.js';
-// app.use('/api/member', member);
+import tree from './routes/tree.js';
+app.use('/api/tree', tree);
+
+import member from './routes/member.js';
+app.use('/api/member', member);
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
