@@ -14,7 +14,7 @@ const Login = () => {
 
     const onFailure = (err) => {
         console.log('failed:', err);
-        // setIsShown(current => !current);
+        setIsShown(current => !current);
     };
 
     return(

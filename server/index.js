@@ -16,6 +16,9 @@ app.use('/api/tree', tree);
 import member from './routes/member.js';
 app.use('/api/member', member);
 
+import users from './routes/users.js';
+app.use('/api/users', users);
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });

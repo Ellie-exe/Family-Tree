@@ -8,8 +8,8 @@ router.use(express.json());
 import userSchema from '../schemas/userSchema.js';
 const users = mongoose.model('users', userSchema);
 
-router.get('/:id', (req, res) => {
-    users.findOne({ id: req.params.id }, (err, user) => {
+router.get('/:email', (req, res) => {
+    users.findOne({ id: req.params.email }, (err, user) => {
         if (err) {res.sendStatus(404); }
         else { res.json(user); }
     });
