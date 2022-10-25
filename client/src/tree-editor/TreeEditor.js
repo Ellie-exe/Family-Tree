@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Field from '../field/Field';
 import Navbar from "../navbar/Navbar";
+import MemberEditor from '../member-editor/MemberEditor';
+import styles from './TreeEditor.module.css';
 
 const TreeEditor = () => {
     const history = useHistory();
@@ -63,6 +65,7 @@ const TreeEditor = () => {
      */
     const exitModal = () => {
         setMemberModal(false);
+        setMember(null);
     };
 
     const addFieldHandler = async (e) => {
@@ -115,34 +118,11 @@ const TreeEditor = () => {
 
     return (
         <div>
-            <Navbar/>
-            <input type='text' value={name} onChange={nameChangeHandler}/>
-            <button onClick={() => addMemberHandler(name)}>Add member</button>
-            {tree && tree.members.map(member => <h1 key={member._id}
-                                                    onClick={() => onMember(member._id)}>{`${member.name} ${member._id}`}</h1>)}
-            {memberModal && <>
-                <>{member.fields.map(field => {
-                    return (
-                        <div>
-                            <Field key={member._id} onClick={() => onMember(field._id)} field_id={field._id} member_id={member._id} submit={fieldSubmitHandler}
-                                   name={field.name}
-                                   val={field.value}/>
-                        </div>)
-                })}
-                </>
-                <form onSubmit={addFieldHandler}>
-                    <input type='text' value={fieldName.toString()} onChange={fieldNameChangeHandler}
-                           placeholder='Name of field'/>
-                    <input type='text' value={fieldVal.toString()} onChange={fieldValChangeHandler}
-                           placeholder='Value of field'/>
-                    <button type='submit'>Save field</button>
-                </form>
-                <button onClick={() => {
-                    setMemberModal(false);
-                    setMember(null)
-                }}>Close modal
-                </button>
-            </>}
+            {memberModal && <Navbar hidden={true}/>}
+            {!memberModal && <Navbar/>}
+            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id}onClick={() => onMember(member._id)}>{member.name}</h1>)}
+            {memberModal && <MemberEditor onX={exitModal} member={member}/>}
+
         </div>
     )
 };

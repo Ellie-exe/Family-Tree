@@ -1,0 +1,121 @@
+.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100vh; /* Full height */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    overflow: auto;
+}
+
+/* Modal Content */
+.modalContent {
+    border-radius: 3rem;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 100px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* display: flex; */
+    /* flex-direction: column; */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .26);
+    background-color: rgb(24, 25, 26);
+    margin: auto;
+    height: 40vw;
+    width: 40vw;
+    /*padding: 20px;*/
+    /*border: 1px solid #888;*/
+    padding: 2vh;
+}
+
+.input {
+    outline: none;
+    padding: 1rem;
+    border-radius: 5vh;
+    width: 25vw;
+    margin-top: 10vh;
+    color: black;
+    text-align: center;
+    border: .1vh solid lightgray;
+}
+
+.form {
+    display: flex;
+    justify-content: right;
+    flex-direction: column;
+    overflow: scroll;
+    /* flex: 1; */
+    margin: auto;
+    /* position: fixed; */
+    left: 50%;
+    top: 50%;
+    max-height: 100vh;
+    padding-right: 8vw;
+    margin-left: 9vw;
+}
+
+.modalContent h1 {
+    right: 0;
+    float: right;
+}
+
+.button {
+    display: block;
+    background-color: forestgreen;
+    width: 15vw;
+    color: lightgray;
+    border-radius: 1rem;
+    padding: 1vh 4vh 1vh 4vh;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: .5;
+}
+
+.x {
+    /* margin-left: 37vw; */
+    cursor: pointer;
+    float: right;
+    color: white;
+    justify-content: right;
+    margin-right: 1vw;
+    margin-top: 2vh;
+}
+
+.x:hover {
+    opacity: .5;
+}
+
+.buttonContainer {
+    width: 21vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fieldButton {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    background-color: darkgray;
+    width: 10vw;
+    height: 5vh;
+    margin-top: 4vh;
+    cursor: pointer;
+    margin-bottom: 5vh;
+}
+
+.fieldButton:hover {
+    opacity: .5;
+}
+
+.sapMInputBaseReadonly .sapMInputBaseInner::placeholder {
+    opacity: 100;
+}

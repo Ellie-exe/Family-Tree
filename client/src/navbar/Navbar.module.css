@@ -59,3 +59,29 @@ body {
     opacity: .8;
     cursor: pointer;
 }
+
+.listContainer {
+    position: absolute;
+    /* display: flex; */
+    /* justify-content: right; */
+    background-color: white;
+    right: 2vh;
+    top: 8vh;
+    /* margin-left: 94%; */
+    /* margin-right: 2vw; */
+    padding: 2vh;
+}
+
+.list {
+    /* background-color: white; */
+    /* float: right; */
+}
+
+.list li {
+    list-style: none;
+}
+
+.list li:hover {
+    cursor: pointer;
+    opacity: .8;
+}

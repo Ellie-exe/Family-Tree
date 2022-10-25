@@ -9,7 +9,7 @@ body {
 
 .treesContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 30vw);
+    grid-template-columns: repeat(auto-fill, 32vw);
     justify-content: center;
     flex-wrap: wrap;
 }
