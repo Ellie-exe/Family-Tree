@@ -1,11 +1,11 @@
 import React from 'react';
-import './App.css';
-import Login from './login/Login';
+import Feed from './feed/Feed.js';
 
 const App = () => {
+
     return (
         <div className='App'>
-            <Login/>
+            <Feed/>
         </div>
     );
 }

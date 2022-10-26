@@ -5,21 +5,32 @@ import styles from './Feed.module.css';
 const Feed = () => {
     const [trees, setTrees] = useState([]);
 
-    useEffect(async () => {
-        /* need to get actual route */
-        setTrees(await fetch('http://localhost').trees)
+    useEffect(() => {
+        const getData = async () => {
+            /* need to get actual route */
+            // try {
+            //     const data = await fetch('http://localhost')
+            //     setTrees(data.trees);
+            // } catch (err) {
+            //     console.log(err);
+            // }
+            setTrees([{name: 'Tree 1', numOccupants: 5}]); // placeholder
+        };
+        getData();
     }, [])
     return (
         <div className={styles.container}>
-            {trees.length !== 0 && trees.map(tree => {
-                return (
-                    <div>
-                        <h1>{tree.name}</h1>
-                        <h1>{tree.numOccupants}</h1>
-                    </div>
-                )
-            })}
-
+            <div>
+                {trees.length !== 0 && trees.map(tree => {
+                    return (
+                        <>
+                            <h1>{tree.name}</h1>
+                            <h1>{tree.numOccupants}</h1>
+                        </>
+                    )
+                })}
+                <span>&#43;</span>
+            </div>
         </div>
     )
 };
