@@ -37,7 +37,28 @@ router.post('/:id', (req, res) => {
     });
 });
 
+router.post('/:id/trees', (req, res) => {
+    users.findOneAndUpdate({ id: req.params.id }, req.body, (err, user) => {
+        if (err) { res.sendStatus(404); }
+        else { res.sendStatus(200); }
+    });
+});
+
+router.post('/:id/permission', (req, res) => {
+    users.findOneAndUpdate({ id: req.params.id }, req.body, (err, user) => {
+        if (err) { res.sendStatus(404); }
+        else { res.sendStatus(200); }
+    });
+});
+
 router.delete('/:id', (req, res) => {
+    users.findOneAndDelete({ id: req.params.id }, (err, user) => {
+        if (err) { res.sendStatus(404); }
+        else { res.sendStatus(200); }
+    });
+});
+
+router.delete('/:id/trees', (req, res) => {
     users.findOneAndDelete({ id: req.params.id }, (err, user) => {
         if (err) { res.sendStatus(404); }
         else { res.sendStatus(200); }
