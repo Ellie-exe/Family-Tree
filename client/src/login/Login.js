@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
 import styles from './Login.module.css';
 import AuthContext from '../context/auth-context';
+import { useHistory } from 'react-router-dom';
 
 const Login = (props) => {
     const authCtx = useContext(AuthContext);
+    const history = useHistory();
 
     const onSuccess = (res) => {
-        document.getElementById('signInDiv').hidden = true;
         authCtx.login(res.credential);
-    };
-
-    const logout = () => {
-        authCtx.logout();
-        document.getElementById('signInDiv').hidden = false;
+        history.push('/feed');
     };
 
     useEffect(() => {
@@ -31,10 +28,8 @@ const Login = (props) => {
     return (
         <div className={styles.body}>
             <div className={styles.container}>
-                {/*<h1 className={styless.header}>Log in to FamilTree</h1>*/}
                 <h1 className={styles.subhead}>Start reliving your family's history.</h1>
                 <div id='signInDiv'></div>
-                {authCtx.token !== '' && <button onClick={logout}>sign out</button>}
             </div>
         </div>
     )
