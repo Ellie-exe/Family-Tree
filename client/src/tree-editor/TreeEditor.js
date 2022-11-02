@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const TreeEditor = () => {
-  return(<h1>Tree editor</h1>)
+  const [members, setMembers] =  useState([{name: 'Jim'}, {name: 'Ryan'}, {name: 'Cory'}, {name: 'Cameron'}]);
+
+  return(<>{members.map(member => <h1>{member.name}</h1>)}</>)
 };
 
 export default TreeEditor;
