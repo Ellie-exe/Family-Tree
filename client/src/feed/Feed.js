@@ -14,7 +14,7 @@ const Feed = () => {
             // } catch (err) {
             //     console.log(err);
             // }
-            setTrees([{name: 'Tree 1', numOccupants: 5}]); // placeholder
+            setTrees([{name: 'Tree 1', numOccupants: 5}, {name: 'Tree 2', numOccupants: 8}]); // placeholder
         };
         getData();
     }, [])
