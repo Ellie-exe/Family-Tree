@@ -11,6 +11,10 @@ const Feed = () => {
       history.push('/editor');
     };
 
+    const addTree = () => {
+        setTrees(prevState => [...prevState, {name: `Tree ${prevState.length + 1}`, numOccupants: 0}]);
+    }
+
     useEffect(() => {
         const getData = async () => {
             /* need to get actual route */
@@ -35,7 +39,7 @@ const Feed = () => {
                         </div>
                     )
                 })}
-                <span>&#43;</span>
+                <span onClick={addTree}>&#43;</span>
             </div>
         </div>
     )
