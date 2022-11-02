@@ -1,5 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import {verify} from './auth.js'
 
 await mongoose.connect('mongodb://localhost:27017/familyTreeDB');
 const router = express.Router
@@ -16,6 +17,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/:id', (req, res) => {
+    verify(token).catch(console.error);
     trees.findOneAndUpdate({ id: req.params.id }, req.body, (err, tree) => {
         if (err) { res.sendStatus(404); }
         else { res.sendStatus(200); }
