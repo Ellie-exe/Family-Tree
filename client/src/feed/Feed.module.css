@@ -1,3 +1,7 @@
 .container {
     color: inherit;
 }
+
+div:hover {
+    cursor: pointer;
+}

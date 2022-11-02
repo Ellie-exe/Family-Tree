@@ -2,6 +2,7 @@ import React from 'react';
 import Feed from './feed/Feed.js';
 import Login from "./login/Login";
 import { Switch, Route } from 'react-router-dom';
+import TreeEditor from "./tree-editor/TreeEditor";
 
 const App = () => {
 
@@ -12,6 +13,9 @@ const App = () => {
             </Route>
             <Route path='/feed' exact>
                 <Feed/>
+            </Route>
+            <Route path='/editor' exact>
+                <TreeEditor/>
             </Route>
         </Switch>
     );
