@@ -8,6 +8,8 @@ router.use(express.json());
 import memberSchema from '../schemas/memberSchema.js';
 const members = mongoose.model('members', memberSchema);
 
+// TODO: fix this route like the others
+
 router.get('/:id', (req, res) => {
     members.findOne({ id: req.params.id }, (err, member) => {
         if (err) {res.sendStatus(404); }

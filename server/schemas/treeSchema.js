@@ -1,15 +1,15 @@
 import { Schema } from 'mongoose';
 
 const treeSchema = new Schema({
-    id: Number,
-    ownerID: Number,
-    userIDs: [Number],
-    members: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'members'
-        }
-    ]
+    numMembers: Number,
+    members: [{
+        type: Schema.Types.ObjectId,
+        ref: 'members'
+    }],
+    users: [{
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+    }]
 });
 
 export default treeSchema

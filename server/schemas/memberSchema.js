@@ -1,8 +1,10 @@
 import { Schema } from 'mongoose';
 
-const treeSchema = new Schema({
-    name: String,
-    age: Number
+const memberSchema = new Schema({
+    fields: [{
+        name: String,
+        value: Schema.Types.Mixed
+    }]
 });
 
-export default treeSchema
+export default memberSchema

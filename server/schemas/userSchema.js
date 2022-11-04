@@ -1,14 +1,14 @@
 import { Schema } from 'mongoose';
 
 const userSchema = new Schema({
-    id: Number,
     email: String,
-    trees: [
-        {
-            id: Number,
-            editable: Boolean
+    trees: [{
+        canEdit: Boolean,
+        tree: {
+            type: Schema.Types.ObjectId,
+            ref: 'trees'
         }
-    ]
+    }]
 });
 
 export default userSchema
