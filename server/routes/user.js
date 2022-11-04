@@ -50,11 +50,7 @@ router.post('/trees', async (req, res) => {
 
         }, (err, tree) => {
             if (err) return res.sendStatus(500);
-
-            let editable = req.query['editable'];
-            if (!editable) editable = false;
-
-            user.trees.push({ canEdit: editable, tree: tree._id });
+            user.trees.push({ canEdit: true, tree: tree._id });
         });
     });
 });
