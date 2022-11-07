@@ -1,5 +1,4 @@
-import React from 'react';
-import {useState, useEffect} from "react";
+import React, { useEffect, useState } from 'react';
 import styles from './Feed.module.css';
 
 const Feed = () => {
@@ -7,16 +6,19 @@ const Feed = () => {
 
     useEffect(() => {
         const getData = async () => {
-            /* need to get actual route */
-            // try {
-            //     const data = await fetch('http://localhost')
-            //     setTrees(data.trees);
-            // } catch (err) {
-            //     console.log(err);
-            // }
-            setTrees([{name: 'Tree 1', numOccupants: 5}, {name: 'Tree 2', numOccupants: 8}]); // placeholder
+            try {
+                return await fetch('http://localhost:8080', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+            }
+
         };
-        getData();
+        setTrees(getData().trees);
     }, [])
     return (
         <div className={styles.container}>
@@ -24,8 +26,8 @@ const Feed = () => {
                 {trees.length !== 0 && trees.map(tree => {
                     return (
                         <>
-                            <h1>{tree.name}</h1>
-                            <h1>{tree.numOccupants}</h1>
+                            <h1>{tree.id}</h1>
+                            <h1>{tree.numMembers}</h1>
                         </>
                     )
                 })}
