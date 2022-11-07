@@ -7,8 +7,7 @@ const Feed = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                return await fetch('http://localhost:8080', {
-                    method: 'POST',
+                return await fetch('http://localhost:8080/api/users/trees', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
