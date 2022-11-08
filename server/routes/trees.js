@@ -28,6 +28,22 @@ router.get('/', async (req, res) => {
     });
 });
 
+router.get('/:treeID', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
+    });
+
+    if (!ticket) return res.sendStatus(401);
+
+    trees.findById(req.params['treeID'], async (err, tree) => {
+        if (err) return res.sendStatus(500);
+
+        await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
+        res.json(tree);
+    });
+});
+
 router.post('/', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
