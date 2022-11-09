@@ -1,7 +1,7 @@
 .container {
-    color: inherit;
+
 }
 
-div:hover {
+.tree {
     cursor: pointer;
 }
