@@ -17,14 +17,16 @@ const Feed = () => {
 
     useEffect(() => {
         const getData = async () => {
-            /* need to get actual route */
-            // try {
-            //     const data = await fetch('http://localhost')
-            //     setTrees(data.trees);
-            // } catch (err) {
-            //     console.log(err);
-            // }
-            setTrees([{name: 'Tree 1', numOccupants: 5}, {name: 'Tree 2', numOccupants: 8}]); // placeholder
+            try {
+                const data = await fetch('http://localhost/api/trees', {
+                    headers: {
+                        'token': `Bearer ${localStorage.getItem('key')}`
+                    }
+                })
+                setTrees(data.trees);
+            } catch (err) {
+                console.log(err);
+            }
         };
         getData();
     }, [])
