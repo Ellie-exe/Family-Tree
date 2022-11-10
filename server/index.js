@@ -4,11 +4,17 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+import cors from 'cors';
 
 const app = express();
 const PORT = 8080;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(cors({
+    origin: 'http://localhost:3000'
+}))
+
+app.use(express.json());
 
 import members from './routes/members.js';
 app.use('/api/members', members);

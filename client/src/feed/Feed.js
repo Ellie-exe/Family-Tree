@@ -6,10 +6,11 @@ const Feed = () => {
     const [trees, setTrees] = useState([]);
     const [nameForm, setNameForm] = useState(false);
     const [treeName, setTreeName] = useState('');
+    const [update, setUpdate] = useState(0);
     const history = useHistory();
 
     const onTreeClick = (treeId) => {
-        history.push(`/trees?treeId=${treeId}`);
+        history.push(`/editor?treeId=${treeId}`);
     };
 
     const onPlusClick = () => {
@@ -17,13 +18,14 @@ const Feed = () => {
     };
 
     const nameChangeHandler = (e) => {
-      setTreeName(e.target.value);
+        setTreeName(e.target.value);
+        console.log(e.target.value);
     };
 
     const onNameSubmit = async (e) => {
         e.preventDefault();
         try {
-            await fetch('localhost:8080/api/trees', {
+            await fetch('http://localhost:8080/api/trees', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -31,47 +33,39 @@ const Feed = () => {
                 body: JSON.stringify({name: treeName})
             })
             setTreeName('');
-            const res = await fetch('http://localhost:8080/api/users/trees', {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            setTrees(res.trees);
+            setUpdate(prev => prev + 1);
         } catch (e) {
             console.log(e);
         }
         setNameForm(false);
     }
 
-    // useEffect(() => {
-    //     const getData = async () => {
-    //         try {
-    //             return await fetch('http://localhost:8080/api/users/trees', {
-    //                 headers: {
-    //                     'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //                 }
-    //             });
-    //         } catch (err) {
-    //             console.log(err);
-    //         }
-    //
-    //     };
-    //     setTrees(getData().trees);
-    // }, [])
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const res = await fetch('http://localhost:8080/api/trees', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                const jsRes = await res.json();
+                setTrees(jsRes.trees);
+                console.log(jsRes.trees);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        getData();
+    }, [update])
+
     return (
         <div className={styles.container}>
             <div>
-                {nameForm && <form onSubmit={onNameSubmit}><input onChange={nameChangeHandler} type='text' value={treeName}/>
-                    <button type='submit'>Submit</button>
-                </form>}
-                {trees.map(tree => {
-                    return (
-                        <div className={styles.tree} onClick={() => onTreeClick(tree.id)}>
-                            <h1>{tree.id}</h1>
-                            <h1>{tree.numMembers}</h1>
-                        </div>
-                    )
-                })}
+                {nameForm &&
+                    <form onSubmit={onNameSubmit}><input onChange={nameChangeHandler} type='text' value={treeName}/>
+                        <button type='submit'>Submit</button>
+                    </form>}
+                {trees.map(tree => <h1 onClick={() => onTreeClick(tree._id)} key={tree._id}>{tree._id}</h1>)}
                 <div onClick={onPlusClick} className={styles.tree}>
                     <h1>+</h1>
                 </div>

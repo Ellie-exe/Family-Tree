@@ -14,25 +14,17 @@ const Field = (props) => {
         console.log(e.target.value);
     };
 
-    const submitHandler = async (e) => {
+    const submitHandler = e => {
         e.preventDefault();
-        await fetch(`localhost:8080/api/members/${props._id}/fields`, {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name: name, val: val})
-        })
-    };
+        props.submit(props.member_id, props.field_id, name, val);
+    }
 
     return (
         <div>
             <form onSubmit={submitHandler}>
+                {name && <input onChange={nameChangeHandler} type='text' value={name}/>}
+                {val && <input onChange={valChangeHandler} type='text' value={val}/>}
                 <button type='submit'>Save</button>
-                <div>
-                    <input onChange={nameChangeHandler} type='text' value={name}/>
-                    <input onChange={valChangeHandler} type='text' value={val}/>
-                </div>
             </form>
         </div>
     )

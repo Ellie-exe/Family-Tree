@@ -49,6 +49,7 @@ router.post('/:memberID/fields', async (req, res) => {
 });
 
 router.patch('/:memberID/fields/:fieldID', async (req, res) => {
+    console.log('in')
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID

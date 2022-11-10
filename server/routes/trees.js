@@ -22,10 +22,25 @@ router.get('/', async (req, res) => {
 
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
-
-        await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
-        res.json(user.trees);
+        /* USERS IS COMING BACK NULL */
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
+        res.json({'trees': u.trees});
     });
+});
+
+router.get('/:_id', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
+    });
+    if (!ticket) return res.sendStatus(401);
+
+    users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
+        if (err) return res.status(500);
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
+        const tree = u.trees.find(tree => tree.id === req.params._id);
+        res.json({tree: tree});
+    })
 });
 
 router.post('/', async (req, res) => {
@@ -66,7 +81,9 @@ router.post('/:treeID/members', async (req, res) => {
             if (err) return res.sendStatus(500);
 
             tree.members.push(member._id);
-            tree.numMembers++;
+            await trees.findOneAndUpdate({ _id: req.params['treeId'] }, { $inc: { numMembers: 1}});
+            // const num = tree.numMembers;
+            // tree.numMembers = num + 1;
             tree.save();
 
             await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
