@@ -11,21 +11,6 @@ await mongoose.connect('mongodb://127.0.0.1:27017/familyTreeDB');
 import members from '../modals/memberModal.js';
 import fields from '../modals/fieldModal.js';
 
-router.get('/:memberID', async (req, res) => {
-    const ticket = await client.verifyIdToken({
-        idToken: req.headers['authorization'].split(' ')[1],
-        audience: CLIENT_ID
-
-    }).catch(() => { res.status(401) });
-
-    if (res.statusCode === 401) return res.sendStatus(401);
-
-    members.findById(req.params['memberID'], (err, member) => {
-        if (err) return res.sendStatus(500);
-        res.json(member);
-    });
-});
-
 router.post('/:memberID/fields', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
