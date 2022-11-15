@@ -1,43 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import styles from './Feed.module.css';
+import { useHistory } from 'react-router-dom';
+import Modal from '../modal/Modal';
+import Navbar from '../navbar/Navbar';
 
 const Feed = () => {
+
+    /* State to keep track of the trees being requested from the database */
     const [trees, setTrees] = useState([]);
-    const [nameForm, setNameForm] = useState(false);
-    const [treeName, setTreeName] = useState('');
+
+    /* State that will be used to force the page to request trees from the database */
     const [update, setUpdate] = useState(0);
+
+    /* State responsible for opening and closing the modal */
+    const [modal, setModal] = useState(false);
+
+    /* Need this to redirect the user */
     const history = useHistory();
 
-    const onTreeClick = (treeId) => {
-        history.push(`/editor?treeId=${treeId}`);
-    };
+    /**
+     * To be called when a tree is clicked.
+     *
+     * This will result in the user being
+     * redirected to a page showing the
+     * tree's contents.
+     *
+     * @param treeId
+     */
+    const onTreeClick = (treeId) => history.push(`/editor?treeId=${treeId}`);
 
-    const onPlusClick = () => {
-        setNameForm(true);
-    };
+    /**
+     * To be called when the "+" is clicked to create a new tree.
+     *
+     * This will result in the modal being shown requesting a name for the new tree.
+     */
+    const onPlusClick = () => setModal(true);
 
-    const nameChangeHandler = (e) => {
-        setTreeName(e.target.value);
-        console.log(e.target.value);
-    };
+    /**
+     * To be called on the creation of a new tree.
+     *
+     * This will result in the modal being closed.
+     */
+    const onNameSubmit = () => {
+        setUpdate(prev => prev + 1);
+        setModal(false);
+    }
 
-    const onNameSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await fetch('http://localhost:8080/api/trees', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({name: treeName})
-            })
-            setTreeName('');
-            setUpdate(prev => prev + 1);
-        } catch (e) {
-            console.log(e);
+    /**
+     * Maps each tree retrieved from the database to an equivalent JSX element.
+     *
+     * @returns {*[]} array of JSX elements representing the trees from the database.
+     */
+    const mapItems = () => {
+        const items = [];
+
+        for (let i = 0; i < trees.length; ++i) {
+            const tree = trees[i];
+            items.push(<div onClick={() => onTreeClick(tree._id)} className={styles.treeContainer}><h1
+                className={styles.name} key={tree._id}>{tree.displayName}</h1></div>)
         }
-        setNameForm(false);
+        return items;
     }
 
     useEffect(() => {
@@ -55,22 +77,26 @@ const Feed = () => {
                 console.log(err);
             }
         };
-        getData();
+        void getData();
     }, [update])
 
     return (
-        <div className={styles.container}>
-            <div>
-                {nameForm &&
-                    <form onSubmit={onNameSubmit}><input onChange={nameChangeHandler} type='text' value={treeName}/>
-                        <button type='submit'>Submit</button>
-                    </form>}
-                {trees.map(tree => <h1 onClick={() => onTreeClick(tree._id)} key={tree._id}>{tree._id}</h1>)}
-                <div onClick={onPlusClick} className={styles.tree}>
-                    <h1>+</h1>
+        <>
+            <Navbar hidden={modal}/>
+            <div className={styles.container}>
+
+                {/* Open the modal if the state indicates such */}
+                {modal && <Modal onX={() => setModal(false)} onSubmit={onNameSubmit}/>}
+                <div className={styles.treesContainer}>
+
+                    {/* Render a list of the trees retrieved from the DB */}
+                    {mapItems()}
+                    <div onClick={onPlusClick} className={styles.treeContainer}>
+                        <h1 className={styles.plus}>+</h1>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 };
 export default Feed;

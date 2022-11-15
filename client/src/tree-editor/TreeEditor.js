@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Field from '../field/Field';
+import Navbar from "../navbar/Navbar";
 
 const TreeEditor = () => {
     const history = useHistory();
@@ -114,6 +115,7 @@ const TreeEditor = () => {
 
     return (
         <div>
+            <Navbar/>
             <input type='text' value={name} onChange={nameChangeHandler}/>
             <button onClick={() => addMemberHandler(name)}>Add member</button>
             {tree && tree.members.map(member => <h1 key={member._id}

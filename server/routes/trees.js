@@ -67,11 +67,13 @@ router.post('/', async (req, res) => {
 
     if (!ticket) return res.sendStatus(401);
 
-    await trees.create({ name: req.body['name'] }, async (err, tree) => {
+    await trees.create({ displayName: req.body.name}, async (err, tree) => {
         if (err) return res.sendStatus(500);
 
         users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
             if (err) return res.sendStatus(500);
+
+            console.log(user);
 
             user.trees.push(tree._id);
             await user.save();
