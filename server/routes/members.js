@@ -15,9 +15,10 @@ router.get('/:memberID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     members.findById(req.params['memberID'], (err, member) => {
         if (err) return res.sendStatus(500);
@@ -29,9 +30,10 @@ router.post('/:memberID/fields', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     await fields.create({ name: req.body['name'], value: req.body['value'] }, async (err, field) => {
         if (err) return res.sendStatus(500);
@@ -53,9 +55,10 @@ router.patch('/:memberID/fields/:fieldID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     fields.findById(req.params['fieldID'], async (err, field) => {
         if (err) return res.sendStatus(500);
@@ -77,9 +80,10 @@ router.delete('/:memberID/fields/:fieldID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     fields.findOneAndDelete({ _id: req.params['fieldID'] }, async (err) => {
         if (err) return res.sendStatus(500);

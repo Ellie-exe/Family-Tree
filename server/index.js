@@ -16,6 +16,8 @@ app.use(cors({
 
 app.use(express.json());
 
+// TODO: Add a verification middleware and then call next
+
 import members from './routes/members.js';
 app.use('/api/members', members);
 

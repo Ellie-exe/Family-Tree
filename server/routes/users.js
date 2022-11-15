@@ -14,9 +14,9 @@ router.get('/', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);

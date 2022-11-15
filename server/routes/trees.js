@@ -16,15 +16,15 @@ router.get('/', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
         /* USERS IS COMING BACK NULL */
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
-        res.json({'trees': u.trees});
+        res.json({ 'trees': u.trees });
     });
 });
 
@@ -32,14 +32,16 @@ router.get('/:_id', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
-    if (!ticket) return res.sendStatus(401);
+
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.status(500);
+
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
         const tree = u.trees.find(tree => tree.id === req.params._id);
-        res.json({tree: tree});
+        res.json({ tree: tree });
     })
 });
 
@@ -47,9 +49,9 @@ router.get('/:treeID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -63,9 +65,9 @@ router.post('/', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     await trees.create({ displayName: req.body.name}, async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -88,9 +90,9 @@ router.post('/:treeID/members', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -114,9 +116,9 @@ router.post('/:treeID/users', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     users.findOne({ email: req.params['email'] }, async (err, user) => {
         if (err) return res.sendStatus(500);
@@ -140,9 +142,9 @@ router.patch('/:treeID/users/:userID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -161,9 +163,9 @@ router.delete('/:treeID/users/:userID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -187,9 +189,9 @@ router.delete('/:treeID/members/:memberID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
@@ -210,9 +212,9 @@ router.delete('/:treeID', async (req, res) => {
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
-    });
 
-    if (!ticket) return res.sendStatus(401);
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
