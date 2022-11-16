@@ -45,7 +45,7 @@ const TreeEditor = () => {
             },
             body: JSON.stringify({name: name, value: val})
         });
-    };
+    }
 
 
     /**
@@ -56,7 +56,7 @@ const TreeEditor = () => {
      */
     const onMember = (id) => {
         setMemberModal(true);
-        setMember(tree.members.find(({_id}) => _id === id));
+        setMember(tree.generation.find(({_id}) => _id === id));
     };
 
     /**
@@ -120,9 +120,9 @@ const TreeEditor = () => {
         <div>
             {memberModal && <Navbar hidden={true}/>}
             {!memberModal && <Navbar/>}
-            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id}onClick={() => onMember(member._id)}>{member.name}</h1>)}
+            {tree && tree.generation.map(member => <h1 className={styles.member} key={member._id}onClick={() => onMember(member._id)}>{member.name}</h1>)}
             {memberModal && <MemberEditor onX={exitModal} member={member}/>}
-
+            <button>Add new member</button>
         </div>
     )
 };

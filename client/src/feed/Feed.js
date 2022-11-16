@@ -57,7 +57,7 @@ const Feed = () => {
         for (let i = 0; i < trees.length; ++i) {
             const tree = trees[i];
             items.push(<div onClick={() => onTreeClick(tree._id)} className={styles.treeContainer}><h1
-                className={styles.name} key={tree._id}>{tree.displayName}</h1></div>)
+                className={styles.name} key={tree._id}>{tree.name}</h1></div>)
         }
         return items;
     }
