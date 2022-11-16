@@ -19,14 +19,15 @@ const TreeEditor = () => {
     const [fieldVal, setFieldVal] = useState('');
     const [newField, setNewField] = useState(false);
 
-    const addMemberHandler = async (name) => {
-        await fetch(`http://localhost:8080/api/trees/${queryParams.get('treeId')}/members`, {
+    const addMemberHandler = async (e, name) => {
+        e.preventDefault()
+        await fetch(`http://localhost:8080/api/trees/${queryParams.get('treeId')}/users`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name: name})
+            body: JSON.stringify({name: name, canEdit: true})
         });
         setUpdate(prev => prev + 1);
         setName('');
@@ -120,9 +121,13 @@ const TreeEditor = () => {
         <div>
             {memberModal && <Navbar hidden={true}/>}
             {!memberModal && <Navbar/>}
-            {tree && tree.generation.map(member => <h1 className={styles.member} key={member._id}onClick={() => onMember(member._id)}>{member.name}</h1>)}
+            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id}
+                                                    onClick={() => onMember(member._id)}>{member.name}</h1>)}
             {memberModal && <MemberEditor onX={exitModal} member={member}/>}
-            <button>Add new member</button>
+            <form onSubmit={(e) => addMemberHandler(e, name)}>
+                <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+                <button type='submit'>Add member</button>
+            </form>
         </div>
     )
 };
