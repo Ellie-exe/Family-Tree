@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
                     user = newUser;
                 });
             }
-            await user.populate('trees');
+
             res.json({ 'trees': user.trees });
         });
     });
@@ -36,7 +36,6 @@ router.get('/:treeId', async (req, res) => {
 
         trees.findById(req.params['treeId'], async (err, tree) => {
             if (err) return res.sendStatus(500);
-            await tree.populate('generation');
             res.json({ 'tree': tree });
         });
     });
@@ -49,12 +48,6 @@ router.post('/', async (req, res) => {
 
         await trees.create({ name: req.body['name'] }, async (err, tree) => {
             if (err) return res.sendStatus(500);
-
-            // await members.create({ name: 'You', visible: true }, async (err, member) => {
-            //     tree.generation[0].push(member._id);
-            //     tree.numMembers++;
-            //     tree.save();
-            // });
 
             users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
                 if (err) return res.sendStatus(500);
