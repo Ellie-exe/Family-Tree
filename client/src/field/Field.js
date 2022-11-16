@@ -34,12 +34,25 @@ const Field = (props) => {
         });
     };
 
+    const deleteField = async (e) => {
+        e.preventDefault();
+        const memberId = props.member._id;
+        await fetch(`http://localhost:8080/api/members/${memberId}/fields/${props.key}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.form}>
                 {name && <input className={styles.input} onChange={nameChangeHandler} type='text' value={name} placeholder='New Field Name' />}
                 {val && <input className={styles.input} onChange={valChangeHandler} type='text' value={val} placeholder='New Field Value' />}
                 <button onClick={addField} className={styles.button} type='submit'>Save</button>
+                <button onClick={deleteField} className={`${styles.button} ${styles.delete}`} type='submit'>Delete</button>
             </div>
         </div>
     );

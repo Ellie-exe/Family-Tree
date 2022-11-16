@@ -18,11 +18,17 @@
     background-color: forestgreen;
     color: lightgray;
     border: none;
-    width: 9vw;
+    width: 8vw;
     border-radius: 5vh;
     height: 3vh;
     margin: auto;
     cursor: pointer;
+    display: inline-block;
+    margin-bottom: 2vh;
+}
+
+.delete {
+    background-color: red;
 }
 
 .button:hover {
