@@ -1,185 +1,86 @@
 import express from 'express'
-import { OAuth2Client } from 'google-auth-library';
-import mongoose from 'mongoose'
-import members from '../modals/memberModal.js';
-import trees from "../modals/treeModal.js";
-
 const router = express.Router();
 
-const clientId = '740022531730-l28oie7e785fi8n676q35a6nns70lec1.apps.googleusercontent.com';
-const client = new OAuth2Client(clientId);
+import { OAuth2Client } from 'google-auth-library';
+const CLIENT_ID = '740022531730-l28oie7e785fi8n676q35a6nns70lec1.apps.googleusercontent.com';
+const client = new OAuth2Client(CLIENT_ID);
 
+import mongoose from 'mongoose'
 await mongoose.connect('mongodb://127.0.0.1:27017/familyTreeDB');
 
-router.post('/:memberId/partner', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
+import members from '../modals/memberModal.js';
+import fields from '../modals/fieldModal.js';
 
-        await members.create({ name: req.body['name'], visible: true }, async (err, newMember) => {
+router.post('/:memberID/fields', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
+
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
+
+    await fields.create({ name: req.body['name'], value: req.body['value'] }, async (err, field) => {
+        if (err) return res.sendStatus(500);
+
+        members.findById(req.params['memberID'], async (err, member) => {
             if (err) return res.sendStatus(500);
 
-            members.findById(req.params['memberId'], async (err, member) => {
-                if (err) return res.sendStatus(500);
-
-                member.partner = newMember._id;
-                member.save();
-
-                newMember.partner = member._id;
-                newMember.save();
-            });
-
-            trees.findById(req.params['treeId'], async (err, tree) => {
-                if (err) return res.sendStatus(500);
-
-                tree.generation[req.body['generation']].push(newMember._id);
-                tree.numMembers++;
-                tree.save();
-
-                res.sendStatus(200);
-            });
-        });
-    });
-});
-
-router.post('/:memberId/pastPartners', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
-
-        await members.create({ name: req.body['name'], visible: true }, async (err, newMember) => {
-            if (err) return res.sendStatus(500);
-
-            members.findById(req.params['memberId'], async (err, member) => {
-                if (err) return res.sendStatus(500);
-
-                member.pastPartners.push(newMember._id);
-                member.save();
-
-                newMember.pastPartners.push(member._id);
-                newMember.save();
-            });
-
-            trees.findById(req.params['treeId'], async (err, tree) => {
-                if (err) return res.sendStatus(500);
-
-                tree.generation[req.body['generation']].push(newMember._id);
-                tree.numMembers++;
-                tree.save();
-
-                res.sendStatus(200);
-            });
-        });
-    });
-});
-
-router.post('/:memberId/parents', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
-
-        await members.create({ name: req.body['name'], visible: true }, async (err, newMember) => {
-            if (err) return res.sendStatus(500);
-
-            members.findById(req.params['memberId'], async (err, member) => {
-                if (err) return res.sendStatus(500);
-
-                member.parents.push(newMember._id);
-                member.save();
-
-                newMember.children.push(member._id);
-                newMember.save();
-            });
-
-            trees.findById(req.params['treeId'], async (err, tree) => {
-                if (err) return res.sendStatus(500);
-
-                tree.generation[req.body['generation']].push(newMember._id);
-                tree.numMembers++;
-                tree.save();
-
-                res.sendStatus(200);
-            });
-        });
-    });
-});
-
-router.post('/:memberId/children', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
-
-        await members.create({ name: req.body['name'], visible: true }, async (err, newMember) => {
-            if (err) return res.sendStatus(500);
-
-            members.findById(req.params['memberId'], async (err, member) => {
-                if (err) return res.sendStatus(500);
-
-                member.children.push(newMember._id);
-                member.save();
-
-                newMember.parents.push(member._id);
-                newMember.save();
-            });
-
-            trees.findById(req.params['treeId'], async (err, tree) => {
-                if (err) return res.sendStatus(500);
-
-                tree.generation[req.body['generation']].push(newMember._id);
-                tree.numMembers++;
-                tree.save();
-
-                res.sendStatus(200);
-            });
-        });
-    });
-});
-
-router.post('/:memberId/fields', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
-
-        members.findById(req.params['memberId'], async (err, member) => {
-            if (err) return res.sendStatus(500);
-
-            member.fields.set(req.body['name'], req.body['value']);
+            member.fields.push(field._id);
             await member.save();
 
-            res.sendStatus(200);
+            await member.populate({ path: 'fields' });
+            res.json(member);
         });
     });
 });
 
-router.delete('/:memberId/fields', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
+router.patch('/:memberID/fields/:fieldID', async (req, res) => {
+    console.log('in')
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
 
-        members.findById(req.params['memberId'], async (err, member) => {
+    }).catch(() => { res.status(401) });
+
+    if (res.statusCode === 401) return res.sendStatus(401);
+
+    fields.findById(req.params['fieldID'], async (err, field) => {
+        if (err) return res.sendStatus(500);
+
+        field.name = req.body['name'];
+        field.value = req.body['value'];
+        await field.save();
+
+        members.findById(req.params['memberID'], async (err, member) => {
             if (err) return res.sendStatus(500);
 
-            member.fields.delete(req.body['name']);
-            await member.save();
-
-            res.sendStatus(200);
+            await member.populate({ path: 'fields' });
+            res.json(member);
         });
     });
 });
 
-router.delete('/:memberId', async (req, res) => {
-    const token = req.headers['authorization'].split(' ')[1];
-    await client.verifyIdToken({ idToken: token, audience: clientId }, async (err) => {
-        if (err) return res.sendStatus(401);
+router.delete('/:memberID/fields/:fieldID', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
 
-        members.findById(req.params['memberId'], async (err, member) => {
-            if (err) return res.sendStatus(500);
+    }).catch(() => { res.status(401) });
 
-            member.visible = false;
-            await member.save();
+    if (res.statusCode === 401) return res.sendStatus(401);
 
-            res.sendStatus(200);
-        });
+    fields.findOneAndDelete({ _id: req.params['fieldID'] }, async (err) => {
+        if (err) return res.sendStatus(500);
+    });
+
+    members.findById(req.params['memberID'], async (err, member) => {
+        if (err) return res.sendStatus(500);
+
+        member.fields = member.fields.filter(field => field !== req.params['fieldID']);
+
+        await member.populate({ path: 'fields' });
+        res.json(member);
     });
 });
 

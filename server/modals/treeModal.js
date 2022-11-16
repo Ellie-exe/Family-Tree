@@ -2,10 +2,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const treeSchema = new Schema({
-    name: String,
+    displayName: String,
     numMembers: Number,
-    generation: [[{ type: Schema.Types.ObjectId, ref: 'members' }]],
-    users: { type: Map, of: Boolean }
+    members: [{ type: Schema.Types.ObjectId, ref: 'members' }],
+    users: [{ type: Schema.Types.ObjectId, ref: 'users' }]
 });
 
 export default mongoose.model('trees', treeSchema);
