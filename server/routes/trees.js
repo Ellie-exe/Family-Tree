@@ -67,7 +67,6 @@ router.post('/', async (req, res) => {
     });
 });
 
-// This is the endpoint I mean
 router.post('/:treeID/members', async (req, res) => {
     const token = req.headers['authorization'].split(' ')[1];
     await client.verifyIdToken({idToken: token, audience: clientId}, async (err, ticket) => {
