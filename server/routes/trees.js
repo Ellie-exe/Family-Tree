@@ -36,6 +36,7 @@ router.get('/:treeId', async (req, res) => {
 
         trees.findById(req.params['treeId'], async (err, tree) => {
             if (err) return res.sendStatus(500);
+            await tree.populate('generation');
             res.json({ 'tree': tree });
         });
     });
