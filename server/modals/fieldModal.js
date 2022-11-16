@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const fieldSchema = new Schema({
     name: String,
-    value: Schema.Types.Mixed
+    value: String
 });
 
 export default mongoose.model('fields', fieldSchema);

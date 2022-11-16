@@ -27,9 +27,6 @@ app.use('/api/tests', tests);
 import trees from './routes/trees.js';
 app.use('/api/trees', trees);
 
-import users from './routes/users.js';
-app.use('/api/users', users);
-
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
