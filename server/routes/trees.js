@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
         /* USERS IS COMING BACK NULL */
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
         res.json({ 'trees': u.trees });
     });
 });
@@ -39,7 +39,7 @@ router.get('/:_id', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.status(500);
 
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
         const tree = u.trees.find(tree => tree.id === req.params._id);
         console.log(tree);
         res.json({ tree: tree });
@@ -57,7 +57,7 @@ router.get('/:treeID', async (req, res) => {
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
 
-        await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
+        await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
         res.json(tree);
     });
 });
@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
             user.trees.push(tree._id);
             await user.save();
 
-            await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
+            await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
             res.json(user.trees);
         });
     });
@@ -102,13 +102,76 @@ router.post('/:treeID/members', async (req, res) => {
             if (err) return res.sendStatus(500);
 
             tree.members.push(member._id);
-            await trees.findOneAndUpdate({ _id: req.params['treeId'] }, { $inc: { numMembers: 1}});
+            await trees.findOneAndUpdate({ _id: req.params['treeID'] }, { $inc: { numMembers: 1}});
             // const num = tree.numMembers;
             // tree.numMembers = num + 1;
             tree.save();
 
-            await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
+            await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
             res.json(tree);
+        });
+    });
+});
+
+
+router.post('/:treeID/members/:memberID/spouse', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
+
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
+
+    trees.findById(req.params['treeID'], async (err, tree) => {
+        if (err) return res.sendStatus(500);
+
+        members.findById(req.params['memberID'], async (err, member) => {
+            if (err) return res.sendStatus(500);
+
+            await members.create({ name: req.body['name'] }, async (err, spouse) => {
+                if (err) return res.sendStatus(500);
+
+                tree.members.push(spouse._id);
+                await trees.findOneAndUpdate({ _id: req.params['treeID'] }, { $inc: { numMembers: 1}});
+                tree.save();
+
+                member.spouse = spouse._id;
+                member.save();
+
+                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+                res.json(tree);
+            });
+        });
+    });
+});
+
+router.post('/:treeID/members/:memberID/parents', async (req, res) => {
+    const ticket = await client.verifyIdToken({
+        idToken: req.headers['authorization'].split(' ')[1],
+        audience: CLIENT_ID
+
+    }).catch(() => { res.status(401) });
+    if (res.statusCode === 401) return res.sendStatus(401);
+
+    trees.findById(req.params['treeID'], async (err, tree) => {
+        if (err) return res.sendStatus(500);
+
+        members.findById(req.params['memberID'], async (err, member) => {
+            if (err) return res.sendStatus(500);
+
+            await members.create({ name: req.body['name'] }, async (err, parent) => {
+                if (err) return res.sendStatus(500);
+
+                tree.members.push(parent._id);
+                await trees.findOneAndUpdate({ _id: req.params['treeID'] }, { $inc: { numMembers: 1}});
+                tree.save();
+
+                member.parents.push(parent._id);
+                member.save();
+
+                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+                res.json(tree);
+            });
         });
     });
 });
