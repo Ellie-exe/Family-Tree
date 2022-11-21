@@ -18,9 +18,9 @@
     background-color: forestgreen;
     color: lightgray;
     border: none;
-    width: 9vw;
+    width: 10vw;
     border-radius: 5vh;
-    height: 3vh;
+    height: 4vh;
     margin: auto;
     cursor: pointer;
 }
@@ -31,4 +31,9 @@
 
 .container {
     margin-top: 3vh;
+}
+
+.delete {
+    background-color: red;
+    margin-top: 1vh;
 }

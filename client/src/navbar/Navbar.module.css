@@ -67,9 +67,11 @@ body {
     background-color: white;
     right: 2vh;
     top: 8vh;
+    display: flex;
+    justify-content: left;
+    height: 10vh;
     /* margin-left: 94%; */
     /* margin-right: 2vw; */
-    padding: 2vh;
 }
 
 .list {
@@ -78,7 +80,11 @@ body {
 }
 
 .list li {
+    display: flex;
+    justify-content: center;
     list-style: none;
+    text-align: center;
+    margin-right: 2vw;
 }
 
 .list li:hover {

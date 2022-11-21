@@ -41,6 +41,7 @@ router.get('/:_id', async (req, res) => {
 
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]});
         const tree = u.trees.find(tree => tree.id === req.params._id);
+        console.log(tree);
         res.json({ tree: tree });
     })
 });

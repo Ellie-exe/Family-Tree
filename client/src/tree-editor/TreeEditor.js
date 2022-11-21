@@ -19,7 +19,14 @@ const TreeEditor = () => {
     const [fieldVal, setFieldVal] = useState('');
     const [newField, setNewField] = useState(false);
 
-    const addMemberHandler = async (name) => {
+    const onUpdate = () => {
+      setUpdate(prevState => prevState + 1);
+      setMemberModal(false);
+      setMemberModal(true);
+    };
+
+    const addMemberHandler = async (e, name) => {
+        e.preventDefault();
         await fetch(`http://localhost:8080/api/trees/${queryParams.get('treeId')}/members`, {
             method: 'POST',
             headers: {
@@ -35,18 +42,6 @@ const TreeEditor = () => {
     const nameChangeHandler = (e) => {
         setName(e.target.value);
     };
-
-    const fieldSubmitHandler = async (memberId, fieldId, name, val) => {
-        await fetch(`http://localhost:8080/api/members/${memberId}/fields/${fieldId}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name: name, value: val})
-        });
-    };
-
 
     /**
      * To be called when the user clicks on a specific member in the tree. It will bring up a
@@ -68,30 +63,6 @@ const TreeEditor = () => {
         setMember(null);
     };
 
-    const addFieldHandler = async (e) => {
-        e.preventDefault();
-        await fetch(`http://localhost:8080/api/members/${member._id}/fields`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name: fieldName, value: fieldVal})
-        });
-        setFieldName('');
-        setFieldVal('');
-        setUpdate(prev => prev + 1);
-        // setMemberModal(false);
-    };
-
-    const fieldNameChangeHandler = (e) => setFieldName(e.target.value);
-
-    const fieldValChangeHandler = (e) => setFieldVal(e.target.value);
-
-    const addBlankFieldHandler = () => {
-        setNewField(true);
-    }
-
     useEffect(() => {
         const fun = async () => {
             try {
@@ -102,8 +73,12 @@ const TreeEditor = () => {
                     }
                 });
                 const jsRes = await res.json();
+                console.log(jsRes.tree);
                 setTree(jsRes.tree);
                 if (member) {
+                    const newMember = tree.members.find(mem => mem._id === member._id);
+                    setMember(newMember);
+                    console.log(newMember);
                     const id = member._id;
                     exitModal();
                     onMember(id);
@@ -120,12 +95,14 @@ const TreeEditor = () => {
         <div>
             {memberModal && <Navbar hidden={true}/>}
             {!memberModal && <Navbar/>}
-            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id}onClick={() => onMember(member._id)}>{member.name}</h1>)}
-            {memberModal && <MemberEditor onX={exitModal} member={member}/>}
-
+            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id} onClick={() => onMember(member._id)}>{member.name}</h1>)}
+            {memberModal && member && <MemberEditor onX={exitModal} member={member} onUpdate={onUpdate}/>}
+            <form onSubmit={(e) => addMemberHandler(e,name)}>
+                <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+                <button type='submit'>Submit</button>
+            </form>
         </div>
     )
 };
-
 
 export default TreeEditor;

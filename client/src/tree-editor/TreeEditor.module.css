@@ -2,3 +2,16 @@
     color: lightgray;
     cursor: pointer;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.parents {
+    margin-right: 2vw;
+}
+
+a {
+    margin-left: 5vw;
+}

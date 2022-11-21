@@ -29,7 +29,7 @@ const Navbar = (props) => {
                     <NavLink to='/feed'>
                         {/* Tree logo */}
                         <img className={styles.logo} src={require('./tree4.png')} alt='Family Tree Logo'
-                            draggable='false' />
+                             draggable='false' />
                     </NavLink>}
             </div>
 
@@ -38,7 +38,7 @@ const Navbar = (props) => {
                 <div className={styles.initialsContainer} onClick={() => setInitModal(true ? !initModal : false)}>
                     <h1 className={styles.initials}>{getInitials()}</h1>
                 </div>}
-                {initModal && <div onMouseLeave={() => setInitModal(false)} className={styles.listContainer}><ul className={styles.list}>
+            {initModal && <div onMouseLeave={() => setInitModal(false)} className={styles.listContainer}><ul className={styles.list}>
                 <li onClick={logout}>Logout</li>
             </ul>
             </div>}
