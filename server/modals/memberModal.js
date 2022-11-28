@@ -3,8 +3,7 @@ const { Schema } = mongoose;
 
 const memberSchema = new Schema({
     name: String,
-    spouse: { type: Schema.Types.ObjectId, ref: 'members' },
-    parents: [{ type: Schema.Types.ObjectId, ref: 'members' }],
+    children: [{ type: Schema.Types.ObjectId, ref: 'members' }],
     fields: [{ type: Schema.Types.ObjectId, ref: 'fields' }]
 });
 
