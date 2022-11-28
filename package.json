@@ -27,6 +27,8 @@
     "google-auth-library": "^8.6.0",
     "mongoose": "^6.6.6",
     "react-archer": "^4.2.0",
-    "react-connect-lines": "^0.0.3"
+    "react-connect-lines": "^0.0.3",
+    "react-organizational-chart": "^2.2.0",
+    "styled-components": "^5.3.6"
   }
 }

@@ -1,28 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import Field from '../field/Field';
+import { Tree, TreeNode } from 'react-organizational-chart';
+import { useLocation } from 'react-router-dom';
 import Navbar from "../navbar/Navbar";
 import MemberEditor from '../member-editor/MemberEditor';
 import styles from './TreeEditor.module.css';
 
 const TreeEditor = () => {
-    const history = useHistory();
     const [tree, setTree] = useState(null);
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const [memberModal, setMemberModal] = useState(false);
     const [member, setMember] = useState(null);
-    const [members, setMembers] = useState(null);
     const [update, setUpdate] = useState(0);
     const [name, setName] = useState('');
-    const [fieldName, setFieldName] = useState('');
-    const [fieldVal, setFieldVal] = useState('');
-    const [newField, setNewField] = useState(false);
+    const [members, setMembers] = useState(null);
+
+    const StyledNode = styled.div`
+    padding: 5px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid red;
+    cursor: pointer;
+  `;
+
+    const addSelfAndChildren = (tree) => {
+        const arr = [];
+
+        const 
+    };
+
+    const getChildren = (parent) => {
+        const arr = []
+    
+    parent.children.forEach(child => arr.push(<TreeNode label={<StyledNode>{child.name}</StyledNode>));
+    return arr;
+    };
 
     const onUpdate = () => {
-      setUpdate(prevState => prevState + 1);
-      setMemberModal(false);
-      setMemberModal(true);
+        setUpdate(prevState => prevState + 1);
+        setMemberModal(false);
+        setMemberModal(true);
     };
 
     const addMemberHandler = async (e, name) => {
@@ -33,7 +50,7 @@ const TreeEditor = () => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name: name})
+            body: JSON.stringify({ name: name })
         });
         setUpdate(prev => prev + 1);
         setName('');
@@ -51,7 +68,7 @@ const TreeEditor = () => {
      */
     const onMember = (id) => {
         setMemberModal(true);
-        setMember(tree.members.find(({_id}) => _id === id));
+        setMember(tree.members.find(({ _id }) => _id === id)); /* find member object w/ _id == id */
     };
 
     /**
@@ -93,12 +110,12 @@ const TreeEditor = () => {
 
     return (
         <div>
-            {memberModal && <Navbar hidden={true}/>}
-            {!memberModal && <Navbar/>}
+            {memberModal && <Navbar hidden={true} />}
+            {!memberModal && <Navbar />}
             {tree && tree.members.map(member => <h1 className={styles.member} key={member._id} onClick={() => onMember(member._id)}>{member.name}</h1>)}
-            {memberModal && member && <MemberEditor onX={exitModal} member={member} onUpdate={onUpdate}/>}
-            <form onSubmit={(e) => addMemberHandler(e,name)}>
-                <input type='text' value={name} onChange={(e) => setName(e.target.value)}/>
+            {memberModal && member && <MemberEditor onX={exitModal} member={member} onUpdate={onUpdate} />}
+            <form onSubmit={(e) => addMemberHandler(e.name)}>
+                <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
                 <button type='submit'>Submit</button>
             </form>
         </div>

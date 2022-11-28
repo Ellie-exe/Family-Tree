@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
         /* USERS IS COMING BACK NULL */
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]});
         res.json({ 'trees': u.trees });
     });
 });
@@ -39,7 +39,7 @@ router.get('/:_id', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.status(500);
 
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]});
         const tree = u.trees.find(tree => tree.id === req.params._id);
         console.log(tree);
         res.json({ tree: tree });
@@ -57,7 +57,7 @@ router.get('/:treeID', async (req, res) => {
     trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
 
-        await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+        await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
         res.json(tree);
     });
 });
@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
             user.trees.push(tree._id);
             await user.save();
 
-            await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]});
+            await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]});
             res.json(user.trees);
         });
     });
@@ -107,7 +107,7 @@ router.post('/:treeID/members', async (req, res) => {
             // tree.numMembers = num + 1;
             tree.save();
 
-            await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+            await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
             res.json(tree);
         });
     });
@@ -138,7 +138,7 @@ router.post('/:treeID/members/:memberID/spouse', async (req, res) => {
                 member.spouse = spouse._id;
                 member.save();
 
-                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
                 res.json(tree);
             });
         });
@@ -169,7 +169,7 @@ router.post('/:treeID/members/:memberID/parents', async (req, res) => {
                 member.parents.push(parent._id);
                 member.save();
 
-                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'children' }]}]);
+                await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
                 res.json(tree);
             });
         });
