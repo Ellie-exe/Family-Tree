@@ -169,6 +169,9 @@ router.post('/:treeID/members/:memberID/parents', async (req, res) => {
                 member.parents.push(parent._id);
                 member.save();
 
+                parent.children.push(member._id);
+                parent.save();
+
                 await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
                 res.json(tree);
             });
