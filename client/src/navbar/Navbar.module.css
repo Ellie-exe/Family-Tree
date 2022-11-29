@@ -8,6 +8,7 @@ body {
     width: 53vw;
     align-items: center;
     justify-content: right;
+    overflow: auto;
 }
 
 .headerContainer {
@@ -16,6 +17,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 999;
+    min-width: 100%;
 }
 
 .link {

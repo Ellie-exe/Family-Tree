@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Tree, TreeNode } from 'react-organizational-chart';
 import { useLocation } from 'react-router-dom';
 import Navbar from "../navbar/Navbar";
 import MemberEditor from '../member-editor/MemberEditor';
 import styles from './TreeEditor.module.css';
+import styled, { css } from 'styled-components';
 
 const TreeEditor = () => {
     const [tree, setTree] = useState(null);
@@ -14,27 +15,37 @@ const TreeEditor = () => {
     const [update, setUpdate] = useState(0);
     const [name, setName] = useState('');
     const [members, setMembers] = useState(null);
+    const [builtTree, setBuiltTree] = useState([]);
+    const [topLevel, setTopLevel] = useState(null);
+    const [map, setMap] = useState({});
 
-    const StyledNode = styled.div`
-    padding: 5px;
-    border-radius: 8px;
-    display: inline-block;
-    border: 1px solid red;
-    cursor: pointer;
-  `;
+    const ref = useRef(null);
 
-    const addSelfAndChildren = (tree) => {
-        const arr = [];
+    let StyledNode = styled.div`
+        padding: 2vh 8vh;
+        border-radius: 5vh;
+        display: inline-block;
+        border: 1px solid gray;
+        color: lightgray;
+        cursor: pointer;`;
 
-        const 
+
+    const getTopLevel = (localTree) => {
+        return localTree.members.filter(mem => !mem.parents.length);
     };
 
-    const getChildren = (parent) => {
-        const arr = []
-    
-    parent.children.forEach(child => arr.push(<TreeNode label={<StyledNode>{child.name}</StyledNode>));
-    return arr;
-    };
+    const computeJSXSelfAllDesc = (mem) => {
+        // if (!mem) return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
+        // if (!mem.children) return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
+        if (!mem.children || !mem.children.length) {
+          return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} 
+          onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
+        } 
+        else {
+          return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} 
+          onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}>{mem.children.map(child => computeJSXSelfAllDesc(map[child._id]))}</TreeNode>;
+        }
+      }
 
     const onUpdate = () => {
         setUpdate(prevState => prevState + 1);
@@ -56,6 +67,10 @@ const TreeEditor = () => {
         setName('');
     };
 
+    const addChildHandler = () => {
+
+    };
+
     const nameChangeHandler = (e) => {
         setName(e.target.value);
     };
@@ -68,7 +83,8 @@ const TreeEditor = () => {
      */
     const onMember = (id) => {
         setMemberModal(true);
-        setMember(tree.members.find(({ _id }) => _id === id)); /* find member object w/ _id == id */
+        if (id !== -1)setMember(tree.members.find(({ _id }) => _id === id)); /* find member object w/ _id == id */
+        else setMember(null);
     };
 
     /**
@@ -90,12 +106,16 @@ const TreeEditor = () => {
                     }
                 });
                 const jsRes = await res.json();
-                console.log(jsRes.tree);
                 setTree(jsRes.tree);
+                // setTopLevel(getTopLevel(`jsRes.tree));
+                const o = map;
+                for (const member of jsRes.tree.members) {
+                    map[member._id] = member;
+                }
+                setMap(o);
                 if (member) {
-                    const newMember = tree.members.find(mem => mem._id === member._id);
+                    const newMember = jsRes.tree.members.find(mem => mem._id === member._id);
                     setMember(newMember);
-                    console.log(newMember);
                     const id = member._id;
                     exitModal();
                     onMember(id);
@@ -112,12 +132,21 @@ const TreeEditor = () => {
         <div>
             {memberModal && <Navbar hidden={true} />}
             {!memberModal && <Navbar />}
-            {tree && tree.members.map(member => <h1 className={styles.member} key={member._id} onClick={() => onMember(member._id)}>{member.name}</h1>)}
-            {memberModal && member && <MemberEditor onX={exitModal} member={member} onUpdate={onUpdate} />}
-            <form onSubmit={(e) => addMemberHandler(e.name)}>
-                <input type='text' value={name} onChange={(e) => setName(e.target.value)} />
-                <button type='submit'>Submit</button>
-            </form>
+
+            <Tree ref={ref}
+                lineWidth={'2px'}
+                lineColor={'white'}
+                lineBorderRadius={'10px'}
+            label={<StyledNode className={styles.root} onClick={() => onMember(-1)}>Adam & Eve</StyledNode>} 
+            >
+                {tree !== null && getTopLevel(tree).map(mem => computeJSXSelfAllDesc(mem))}
+                </Tree>
+            {memberModal && member && <MemberEditor exitModal={exitModal} memberId={member} treeId={queryParams.get('treeId')} onX={exitModal} member={member} onUpdate={onUpdate}/>}
+            {memberModal && !member && <MemberEditor exitModal={exitModal} memberId={-1} treeId={queryParams.get('treeId')} onX={exitModal} member={member} onUpdate={onUpdate}/>}
+            {/* <form onSubmit={(e) => addMemberHandler(e.name)}> */}
+            {/* <input type='text' value={name} onChange={(e) => setName(e.target.value)} /> */}
+            {/* <button type='submit'>Submit</button> */}
+            {/* </form> */}
         </div>
     )
 };

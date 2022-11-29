@@ -7,7 +7,7 @@
     width: 100%; /* Full width */
     height: 100vh; /* Full height */
     background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-    overflow: auto;
+    overflow: scroll;
 }
 
 /* Modal Content */
@@ -125,4 +125,56 @@ background-color: inherit;
 
 .sapMInputBaseReadonly .sapMInputBaseInner::placeholder {
     opacity: 100;
+}
+
+.inputContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2vh;
+}
+
+.header {
+    text-align: center;
+    color: lightgray;
+}
+
+.nodeInput {
+    outline: none;
+    padding: .5rem;
+    border-radius: 5vh;
+    width: 25vw;
+    margin-top: 3vh;
+    color: black;
+    text-align: center;
+    border: .1vh solid lightgray;
+}
+
+.nodeButton {
+    /* width: 7vw; */
+    color: lightgray;
+    border-radius: 1rem;
+    padding: 1vh 4vh 1vh 4vh;
+    border: none;
+    cursor: pointer;
+    background-color: darkgray;
+    margin: .5vw;
+    color: black;
+}
+
+.nodeButton:hover:not([disabled]) {
+    opacity: .7;
+}
+
+.nodeButtonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+button:disabled {
+    opacity: .3;
+    cursor: text;
+}
+
+.containerTwo {
+    overflow: scroll;
 }

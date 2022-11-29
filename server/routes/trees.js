@@ -41,25 +41,8 @@ router.get('/:_id', async (req, res) => {
 
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }, { path: 'parents' }] }] });
         const tree = u.trees.find(tree => tree.id === req.params._id);
-        console.log(tree);
         res.json({ tree: tree });
     })
-});
-
-router.get('/:treeID', async (req, res) => {
-    const ticket = await client.verifyIdToken({
-        idToken: req.headers['authorization'].split(' ')[1],
-        audience: CLIENT_ID
-
-    }).catch(() => { res.status(401) });
-    if (res.statusCode === 401) return res.sendStatus(401);
-
-    trees.findById(req.params['treeID'], async (err, tree) => {
-        if (err) return res.sendStatus(500);
-
-        await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }]}]);
-        res.json(tree);
-    });
 });
 
 router.post('/', async (req, res) => {
@@ -76,13 +59,11 @@ router.post('/', async (req, res) => {
         users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
             if (err) return res.sendStatus(500);
 
-            console.log(user);
 
             user.trees.push(tree._id);
             await user.save();
 
-            await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]});
-            res.json(user.trees);
+            res.sendStatus(200);
         });
     });
 });
@@ -107,8 +88,9 @@ router.post('/:treeID/members', async (req, res) => {
             // tree.numMembers = num + 1;
             tree.save();
 
-            await tree.populate([{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'spouse' }, { path: 'parents' }]}]);
-            res.json(tree);
+            
+            res.sendStatus(200);
+
         });
     });
 });
@@ -180,6 +162,7 @@ router.post('/:treeID/members/:memberID/parents', async (req, res) => {
 });
 
 router.post('/:treeID/members/:memberID/children', async (req, res) => {
+    
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
@@ -322,7 +305,7 @@ router.delete('/:treeID/members/:memberID', async (req, res) => {
     }).catch(() => { res.status(401) });
     if (res.statusCode === 401) return res.sendStatus(401);
 
-    trees.findById(req.params['treeID'], async (err, tree) => {
+    else {trees.findById(req.params['treeID'], async (err, tree) => {
         if (err) return res.sendStatus(500);
 
         members.findOneAndDelete({ _id: req.params['memberID'] }, async (err) => {
@@ -332,9 +315,9 @@ router.delete('/:treeID/members/:memberID', async (req, res) => {
         tree.members = tree.members.filter(member => member !== req.params['memberID']);
         await tree.save();
 
-        await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
-        res.json(tree);
+        res.sendStatus(200);
     });
+}
 });
 
 router.delete('/:treeID', async (req, res) => {

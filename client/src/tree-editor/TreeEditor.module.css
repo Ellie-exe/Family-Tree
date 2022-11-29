@@ -6,6 +6,8 @@
 .container {
     display: flex;
     justify-content: center;
+    position: relative;
+    overflow: auto;
 }
 
 .parents {
@@ -14,4 +16,21 @@
 
 a {
     margin-left: 5vw;
+}
+
+.root {
+    margin-top: 2vh;
+}
+
+.node:hover {
+    opacity: .7;
+    cursor: pointer;
+}
+
+.node {
+    color: white;
+}
+
+* {
+    scrollbar-color: white;
 }
