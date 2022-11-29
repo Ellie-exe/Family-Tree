@@ -1,0 +1,70 @@
+.modal {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100vh; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modalContent {
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .26);
+    background-color: rgb(24, 25, 26);
+    margin: auto;
+    height: 40vw;
+    width: 40vw;
+    /*padding: 20px;*/
+    /*border: 1px solid #888;*/
+    padding: 2vh;
+}
+
+.input {
+    outline: none;
+    padding: 1rem;
+    border-radius: 5vh;
+    width: 25vw;
+    margin-top: 10vh;
+    color: black;
+    text-align: center;
+    border: .1vh solid lightgray;
+}
+
+.form {
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.button {
+    display: block;
+    background-color: forestgreen;
+    width: 15vw;
+    color: lightgray;
+    border-radius: 1rem;
+    padding: 1vh 4vh 1vh 4vh;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: .5;
+}
+
+.x {
+    cursor: pointer;
+    float: right;
+    color: white;
+}
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}

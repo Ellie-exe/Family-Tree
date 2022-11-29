@@ -1,0 +1,46 @@
+.container {
+    height: 10vh;
+    background-color: rgb(24, 25, 26);
+}
+
+body {
+    background-color: rgb(24, 25, 26);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.treesContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 32vw);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.treeContainer {
+    height: 25vh;
+    background-color: rgb(45, 46, 47);
+    margin: 3vh 1vw;
+    cursor: pointer;
+    color: lightgray;
+    vertical-align: top;
+    text-align: center;
+    display: table;
+}
+
+.name {
+    background: inherit;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.plus {
+    background-color: rgb(45, 46, 47);
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 10vh;
+}
+
+.treeContainer:hover {
+    opacity: .5;
+}

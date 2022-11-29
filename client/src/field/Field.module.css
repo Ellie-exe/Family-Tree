@@ -1,0 +1,39 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.input {
+    text-align: center;
+    border-radius: 5vh;
+    width: 20vw;
+    height: 5vh;
+    margin-bottom: 1vh;
+    outline: none;
+}
+
+.button {
+    background-color: forestgreen;
+    color: lightgray;
+    border: none;
+    width: 10vw;
+    border-radius: 5vh;
+    height: 4vh;
+    margin: auto;
+    cursor: pointer;
+}
+
+.button:hover {
+    opacity: .5;
+}
+
+.container {
+    margin-top: 3vh;
+}
+
+.delete {
+    background-color: red;
+    margin-top: 1vh;
+}

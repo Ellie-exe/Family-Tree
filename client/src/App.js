@@ -1,32 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
-const delay = (ms) => {
-    return new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
-}
+import Feed from './feed/Feed.js';
+import Login from "./login/Login";
+import { Switch, Route } from 'react-router-dom';
+import TreeEditor from "./tree-editor/TreeEditor";
 
 const App = () => {
-    const [data, setData] = React.useState(null);
-
-    React.useEffect(() => {
-        fetch('/api')
-            .then((res) => res.json())
-            .then(async (data) => {
-                await delay(1000)
-                setData(data.message)
-            });
-    }, []);
 
     return (
-        <div className='App'>
-            <header className='App-header'>
-                <img src={logo} className='App-logo' alt='logo' />
-                <p>{data ? data : 'Loading...'}</p>
-            </header>
-        </div>
+        <Switch>
+            <Route path='/login' exact>
+                <Login/>
+            </Route>
+            <Route path='/feed' exact>
+                <Feed/>
+            </Route>
+            <Route path='/editor' exact>
+                <TreeEditor/>
+            </Route>
+        </Switch>
     );
 }
 

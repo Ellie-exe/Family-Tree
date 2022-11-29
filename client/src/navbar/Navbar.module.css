@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: inline-flex;
+    width: 53vw;
+    align-items: center;
+    justify-content: right;
+    overflow: auto;
+}
+
+.headerContainer {
+    height: 10vh;
+    background-color: black;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    min-width: 100%;
+}
+
+.link {
+    color: white;
+    text-decoration: none;
+}
+
+.link:hover {
+    opacity: .5;
+}
+
+.logo {
+    height: 10vh;
+    border-radius: 5vh;
+    width: 10vh;
+    /*margin-left: 47vw;*/
+}
+
+.logo:hover {
+    opacity: .8;
+}
+
+.initialsContainer {
+    float: right;
+    vertical-align: middle;
+    height: 10vh;
+}
+
+.initials {
+    margin-right: 2vw;
+    margin-bottom: 18%;
+    margin-top: 15%;
+    padding: 1vh;
+    color: black;
+    background-color: white;
+    border-radius: 5vh;
+    text-align: center;
+}
+
+.initials:hover {
+    opacity: .8;
+    cursor: pointer;
+}
+
+.listContainer {
+    position: absolute;
+    /* display: flex; */
+    /* justify-content: right; */
+    background-color: white;
+    right: 2vh;
+    top: 8vh;
+    display: flex;
+    justify-content: left;
+    height: 10vh;
+    /* margin-left: 94%; */
+    /* margin-right: 2vw; */
+}
+
+.list {
+    /* background-color: white; */
+    /* float: right; */
+}
+
+.list li {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    text-align: center;
+    margin-right: 2vw;
+}
+
+.list li:hover {
+    cursor: pointer;
+    opacity: .8;
+}

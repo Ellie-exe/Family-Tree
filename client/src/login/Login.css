@@ -1,0 +1,20 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600);
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 2px 5px rgba(0,0,0,.25);
+}
+
+.horizontal-center {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+h2 {
+    font-family: 'open sans condensed';
+    padding: .75em 1em .75em 1.5em;
+}
