@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
         /* USERS IS COMING BACK NULL */
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }]}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }, { path: 'parents' }] }] });
         res.json({ 'trees': u.trees });
     });
 });
@@ -39,7 +39,7 @@ router.get('/:_id', async (req, res) => {
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.status(500);
 
-        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }]}]});
+        const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }, { path: 'parents' }] }] });
         const tree = u.trees.find(tree => tree.id === req.params._id);
         console.log(tree);
         res.json({ tree: tree });
@@ -190,15 +190,18 @@ router.post('/:treeID/members/:memberID/children', async (req, res) => {
         members.findById(req.params['memberID'], async (err, member) => {
             if (err) return res.sendStatus(500);
 
-            await members.create({ name: req.body['name'] }, async (err, parent) => {
+            await members.create({ name: req.body['name'] }, async (err, child) => {
                 if (err) return res.sendStatus(500);
 
-                tree.members.push(parent._id);
+                tree.members.push(child._id);
                 await trees.findOneAndUpdate({ _id: req.params['treeID'] }, { $inc: { numMembers: 1}});
                 tree.save();
 
-                member.children.push(parent._id);
+                member.children.push(child._id);
                 member.save();
+
+                child.parents.push(member._id);
+                child.save();
 
                 res.sendStatus(200);
             });
