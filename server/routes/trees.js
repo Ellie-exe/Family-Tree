@@ -20,15 +20,18 @@ router.get('/', async (req, res) => {
     }).catch(() => { res.status(401) });
     if (res.statusCode === 401) return res.sendStatus(401);
 
-    users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
+    const update = { expire: new Date() };
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true };
+
+    users.findOne({ email: ticket.getPayload().email }, update, options, async (err, user) => {
         if (err) return res.sendStatus(500);
 
-        if (!user) {
-            await users.create({email: ticket.getPayload().email}, (err, newUser) => {
-                if (err) return res.sendStatus(500);
-                user = newUser;
-            });
-        }
+        // if (!user) {
+        //     await users.create({email: ticket.getPayload().email}, (err, newUser) => {
+        //         if (err) return res.sendStatus(500);
+        //         user = newUser;
+        //     });
+        // }
 
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }, { path: 'parents' }] }] });
         res.json({ 'trees': u.trees });

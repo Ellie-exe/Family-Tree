@@ -1,2 +1,5 @@
 .idea
 node_modules
+domain.cert.pem
+private.key.pem
+client/build
