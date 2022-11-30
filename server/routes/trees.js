@@ -69,9 +69,11 @@ router.post('/', async (req, res) => {
         users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
             if (err) return res.sendStatus(500);
 
-
             user.trees.push(tree._id);
             await user.save();
+
+            tree.users.push(user._id);
+            await tree.save();
 
             res.sendStatus(200);
         });
