@@ -22,7 +22,14 @@ router.get('/', async (req, res) => {
 
     users.findOne({ email: ticket.getPayload().email }, async (err, user) => {
         if (err) return res.sendStatus(500);
-        /* USERS IS COMING BACK NULL */
+
+        if (!user) {
+            await users.create({email: ticket.getPayload().email}, (err, newUser) => {
+                if (err) return res.sendStatus(500);
+                user = newUser;
+            });
+        }
+
         const u = await user.populate({ path: 'trees', populate: [{ path: 'users' }, { path: 'members', populate: [{ path: 'fields' }, { path: 'children' }, { path: 'parents' }] }] });
         res.json({ 'trees': u.trees });
     });
