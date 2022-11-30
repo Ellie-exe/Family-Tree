@@ -8,11 +8,11 @@ const __dirname = path.dirname(__filename);
 import cors from 'cors';
 
 const app = express();
-const PORT = 443;
+const PORT = 8080;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(cors({
-    origin: 'https://familtree.xyz'
+    origin: 'localhost:8080'
 }))
 
 let privateKey = fs.readFileSync( 'private.key.pem' );
