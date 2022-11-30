@@ -321,26 +321,27 @@ router.delete('/:treeID/members/:memberID', async (req, res) => {
 });
 
 router.delete('/:treeID', async (req, res) => {
+    console.log(req.params.treeID);
     const ticket = await client.verifyIdToken({
         idToken: req.headers['authorization'].split(' ')[1],
         audience: CLIENT_ID
 
-    }).catch(() => { res.status(401) });
-    if (res.statusCode === 401) return res.sendStatus(401);
+    }).catch(() => { return res.sendStatus(401) });
+    // if (res.statusCode === 401) return res.sendStatus(401);
 
     trees.findById(req.params['treeID'], async (err, tree) => {
-        if (err) return res.sendStatus(500);
+        // if (err) return res.sendStatus(500);
 
         await tree.populate([{ path: 'users' }, { path: 'members', populate: { path: 'fields' }}]);
 
         for (const user of tree.users) {
-            user.trees = user.trees.filter(tree => tree !== req.params['treeID']);
+            user.trees = user.trees.filter(tree => tree._id !== req.params['treeID']);
             await user.save();
         }
     });
 
-    trees.deleteOne({ _id: req.params['id'] }, (err) => {
-        if (err) return res.sendStatus(500);
+    trees.deleteOne({ _id: req.params['treeID'] }, (err) => {
+        // if (err) return res.sendStatus(500);
     });
 
     res.sendStatus(200);

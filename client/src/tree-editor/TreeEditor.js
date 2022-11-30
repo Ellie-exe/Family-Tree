@@ -14,9 +14,6 @@ const TreeEditor = () => {
     const [member, setMember] = useState(null);
     const [update, setUpdate] = useState(0);
     const [name, setName] = useState('');
-    const [members, setMembers] = useState(null);
-    const [builtTree, setBuiltTree] = useState([]);
-    const [topLevel, setTopLevel] = useState(null);
     const [map, setMap] = useState({});
 
     const ref = useRef(null);
@@ -35,8 +32,6 @@ const TreeEditor = () => {
     };
 
     const computeJSXSelfAllDesc = (mem) => {
-        // if (!mem) return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
-        // if (!mem.children) return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
         if (!mem.children || !mem.children.length) {
           return <TreeNode onClick={() => onMember(mem._id)} label={<StyledNode className={styles.node} 
           onClick={() => onMember(mem._id)}>{mem.name}</StyledNode>}></TreeNode>
@@ -137,16 +132,11 @@ const TreeEditor = () => {
                 lineWidth={'2px'}
                 lineColor={'white'}
                 lineBorderRadius={'10px'}
-            label={<StyledNode className={styles.root} onClick={() => onMember(-1)}>Adam & Eve</StyledNode>} 
-            >
+            label={<StyledNode className={styles.root} onClick={() => onMember(-1)}>Adam & Eve</StyledNode>}>
                 {tree !== null && getTopLevel(tree).map(mem => computeJSXSelfAllDesc(mem))}
                 </Tree>
             {memberModal && member && <MemberEditor exitModal={exitModal} memberId={member} treeId={queryParams.get('treeId')} onX={exitModal} member={member} onUpdate={onUpdate}/>}
             {memberModal && !member && <MemberEditor exitModal={exitModal} memberId={-1} treeId={queryParams.get('treeId')} onX={exitModal} member={member} onUpdate={onUpdate}/>}
-            {/* <form onSubmit={(e) => addMemberHandler(e.name)}> */}
-            {/* <input type='text' value={name} onChange={(e) => setName(e.target.value)} /> */}
-            {/* <button type='submit'>Submit</button> */}
-            {/* </form> */}
         </div>
     )
 };

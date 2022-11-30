@@ -26,6 +26,7 @@ const MemberEditor = (props) => {
       }
     })
     props.onUpdate()
+    props.exitModal();
   };
 
   const onNodeName = e => {
@@ -42,7 +43,9 @@ const MemberEditor = (props) => {
       },
       body: JSON.stringify({name: nodeName})
     })
+    setNodeName('');
     props.onUpdate();
+    props.exitModal();
   };
 
   const onAddChild = async (e) => {
@@ -55,7 +58,9 @@ const MemberEditor = (props) => {
       },
       body: JSON.stringify({name: nodeName})
     });
+    setNodeName('');
     props.onUpdate();
+    props.exitModal();
   };
 
   const onAddParent = (e) => {
@@ -83,7 +88,7 @@ const MemberEditor = (props) => {
         </div>
         <h1 className={styles.header}>Add / Delete Node</h1>
         <div className={styles.inputContainer}>
-          <input type='text' className={styles.nodeInput} placeholder='New Node Name' onChange={onNodeName}/>
+          <input type='text' value={nodeName} className={styles.nodeInput} placeholder='New Node Name' onChange={onNodeName}/>
         </div>
         <div className={styles.nodeButtonContainer}>
           <button disabled={!nodeName} className={styles.nodeButton} onClick={member ? onAddChild : addTopLevelNode}>Add child</button>

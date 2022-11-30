@@ -54,13 +54,27 @@ const Feed = () => {
     const mapItems = () => {
         const items = [];
 
-        for (let i = 0; i < trees.length; ++i) {
-            const tree = trees[i];
-            items.push(<div onClick={() => onTreeClick(tree._id)} className={styles.treeContainer}><h1
-                className={styles.name} key={tree._id}>{tree.displayName}</h1></div>)
+        for (const tree of trees) {
+            items.push(
+                <div className={styles.treeContainer}>
+                    <h1 onClick={() => onTreeClick(tree._id)} className={styles.name} key={tree._id}>{tree.displayName}</h1>
+                    <button className={styles.button} onClick={() => onDeleteTree(tree._id)}>Delete</button>
+                </div>
+            )
         }
         return items;
     }
+
+    const onDeleteTree = async (treeId) => {
+        await fetch(`http://localhost:8080/api/trees/${treeId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        /* Update the feed */
+        setUpdate(prevState => prevState + 1);
+    };
 
     useEffect(() => {
         const getData = async () => {
@@ -91,7 +105,7 @@ const Feed = () => {
 
                     {/* Render a list of the trees retrieved from the DB */}
                     {mapItems()}
-                    <div onClick={onPlusClick} className={styles.treeContainer}>
+                    <div onClick={onPlusClick} className={styles.treeContainerTwo}>
                         <h1 className={styles.plus}>+</h1>
                     </div>
                 </div>
