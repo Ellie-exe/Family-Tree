@@ -27,7 +27,7 @@ const Feed = () => {
      *
      * @param treeId
      */
-    const onTreeClick = (treeId) => window.open(`http://localhost:3000/editor?treeId=${treeId}`, '_blank')
+    const onTreeClick = (treeId) => window.open(`https://familtree.xyz/editor?treeId=${treeId}`, '_blank')
 
     /**
      * To be called when the "+" is clicked to create a new tree.
