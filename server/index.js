@@ -12,7 +12,7 @@ const PORT = 8080;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(cors({
-    origin: 'localhost:8080'
+    origin: 'http://localhost:8080'
 }))
 
 let privateKey = fs.readFileSync( 'private.key.pem' );
