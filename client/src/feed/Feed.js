@@ -27,7 +27,7 @@ const Feed = () => {
      *
      * @param treeId
      */
-    const onTreeClick = (treeId) => history.push(`/editor?treeId=${treeId}`);
+    const onTreeClick = (treeId) => window.open(`http://localhost:3000/editor?treeId=${treeId}`, '_blank')
 
     /**
      * To be called when the "+" is clicked to create a new tree.
