@@ -58,7 +58,7 @@ const Feed = () => {
             items.push(
                 <div className={styles.treeContainer}>
                     <h1 onClick={() => onTreeClick(tree._id)} className={styles.name} key={tree._id}>{tree.displayName}</h1>
-                    <button className={styles.button} onClick={() => onDeleteTree(tree._id)}>Delete</button>
+                    <h1 className={styles.button} onClick={() => onDeleteTree(tree._id)}>X</h1>
                 </div>
             )
         }
@@ -66,7 +66,7 @@ const Feed = () => {
     }
 
     const onDeleteTree = async (treeId) => {
-        await fetch(`http://localhost:8080/api/trees/${treeId}`, {
+        await fetch(`https://familtree.xyz/api/trees/${treeId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -79,7 +79,7 @@ const Feed = () => {
     useEffect(() => {
         const getData = async () => {
             try {
-                const res = await fetch('http://localhost:8080/api/trees', {
+                const res = await fetch('https://familtree.xyz/api/trees', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }

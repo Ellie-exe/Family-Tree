@@ -26,7 +26,7 @@ const Modal = (props) => {
     const onSubmit = async (e) => {
         e.preventDefault();
         try {
-            await fetch('http://localhost:8080/api/trees', {
+            await fetch('https://familtree.xyz/api/trees', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

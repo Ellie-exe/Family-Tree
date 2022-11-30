@@ -1,11 +1,16 @@
+.container {
+    /*display: flex;*/
+    /*justify-content: center;*/
+}
+
 .member {
     color: lightgray;
     cursor: pointer;
 }
 
 .container {
-    display: flex;
-    justify-content: center;
+    /*display: flex;*/
+    /*justify-content: center;*/
     position: relative;
     overflow: auto;
 }

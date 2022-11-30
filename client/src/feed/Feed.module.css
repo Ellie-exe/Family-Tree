@@ -24,7 +24,7 @@ body {
     cursor: pointer;
     color: lightgray;
     vertical-align: top;
-    text-align: right;
+    text-align: center;
     display: table;
 }
 
@@ -43,6 +43,9 @@ body {
     background: inherit;
     display: table-cell;
     vertical-align: middle;
+    text-align: center;
+    padding-left:2vw;
+    padding-bottom: 2vh;
 }
 
 .plus {
@@ -61,13 +64,10 @@ body {
 }
 
 .button {
-    padding: 1vh 2vh;
-    background: rgb(50, 51, 52);
     color: white;
-    border-radius: 1vh;
     cursor: pointer;
 }
 
 .button:hover {
-    background: lightgray;
+    opacity: .6;
 }

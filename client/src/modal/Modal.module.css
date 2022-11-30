@@ -52,6 +52,7 @@
     padding: 1vh 4vh 1vh 4vh;
     border: none;
     cursor: pointer;
+    margin-bottom: 13vh;
 }
 
 .button:hover {
