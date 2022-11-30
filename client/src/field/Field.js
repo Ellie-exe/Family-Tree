@@ -27,7 +27,7 @@ const Field = (props) => {
         e.preventDefault();
         const memberId = props.member._id;
         console.log(memberId);
-        await fetch(`http://localhost:8080/api/members/${memberId}/fields`, {
+        await fetch(`https://familtree.xyz/api/members/${memberId}/fields`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -40,7 +40,7 @@ const Field = (props) => {
     const updateField = async (e) => {
         e.preventDefault();
         const memberId = props.member._id;
-        await fetch(`http://localhost:8080/api/members/${memberId}/fields/${props.fieldId.toString()}`, {
+        await fetch(`https://familtree.xyz/api/members/${memberId}/fields/${props.fieldId.toString()}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -53,7 +53,7 @@ const Field = (props) => {
     const deleteField = async (e) => {
         e.preventDefault();
         const memberId = props.member._id;
-        await fetch(`http://localhost:8080/api/members/${memberId}/fields/${props.fieldId.toString()}`, {
+        await fetch(`https://familtree.xyz/api/members/${memberId}/fields/${props.fieldId.toString()}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
