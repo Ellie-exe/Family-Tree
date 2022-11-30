@@ -50,7 +50,7 @@ const TreeEditor = () => {
 
     const addMemberHandler = async (e, name) => {
         e.preventDefault();
-        await fetch(`http://localhost:8080/api/trees/${queryParams.get('treeId')}/members`, {
+        await fetch(`https://familtree.xyz/api/trees/${queryParams.get('treeId')}/members`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -95,7 +95,7 @@ const TreeEditor = () => {
         const fun = async () => {
             try {
                 /* GET for user's tree and all its members */
-                const res = await fetch(`http://localhost:8080/api/trees/${queryParams.get('treeId')}`, {
+                const res = await fetch(`https://familtree.xyz/api/trees/${queryParams.get('treeId')}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -124,15 +124,12 @@ const TreeEditor = () => {
     }, [update])
 
     return (
-        <div>
-            {memberModal && <Navbar hidden={true} />}
-            {!memberModal && <Navbar />}
-
+        <div className={styles.container}>
             <Tree ref={ref}
                 lineWidth={'2px'}
                 lineColor={'white'}
                 lineBorderRadius={'10px'}
-            label={<StyledNode className={styles.root} onClick={() => onMember(-1)}>Adam & Eve</StyledNode>}>
+            label={<StyledNode className={styles.node + ' ' + styles.root} onClick={() => onMember(-1)}>Root</StyledNode>}>
                 {tree !== null && getTopLevel(tree).map(mem => computeJSXSelfAllDesc(mem))}
                 </Tree>
             {memberModal && member && <MemberEditor exitModal={exitModal} memberId={member} treeId={queryParams.get('treeId')} onX={exitModal} member={member} onUpdate={onUpdate}/>}
