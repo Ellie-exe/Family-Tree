@@ -7,11 +7,11 @@ const __dirname = path.dirname(__filename);
 import cors from 'cors';
 
 const app = express();
-const PORT = 8080;
+const PORT = 443;
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'https://familtree.xyz'
 }))
 
 app.use(express.json());
